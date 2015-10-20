@@ -1,0 +1,99 @@
+= marlowe
+
+== Description
+
+{marlowe}[https://github.com/KineticCafe/marlowe] provides a correlation id 
+header for Rails and Rack applications to correlate logs for a single request 
+across multiple services.
+
+== Install
+
+You can install it as a gem:
+
+  $ gem install marlowe
+
+or add it into a Gemfile:
+
+  gem 'marlowe'
+
+== Configuration
+
+There is no configuration as of yet. Future plans include configuring the name
+of the correlation id header.
+
+== Accesing the Correlation ID
+
+The correlation id can be accessed throughout the application by accessing the
+{RequestStore}[https://github.com/steveklabnik/request_store] storage.
+
+  RequestStore[:correlation_id]
+
+== Logging
+
+For a rails application, you simply need to change the log formatter to one of
+the provided ones. Correlated versions of both the SimpleFormatter and Formatter 
+are included. 
+
+  # config/environments/development.rb
+  Rails.application.configure do
+    config.log_formatter = CorrelatedSimpleFormatter.new
+  end
+
+
+To create your own formatter, you'll need to access the RequestStore storage.
+You can use this pattern if you've rolled your own logger/formatter:
+
+  # lib/correlated_formatter.rb
+  require 'request_store'
+
+  class CorrelatedSimpleFormatter < ActiveSupport::Logger::SimpleFormatter
+    def call(severity, timestamp, progname, msg)
+      "[#{RequestStore.store[:correlation_id]}] #{super}"
+    end
+  end
+
+
+== Clients
+
+Catching and creating the correlation ID is a great all on its own, but to
+really take advantage of the correlation in a service based architecture you'll
+need to pass the id to the next service in the change.
+
+Here's an example of a {Hurley}[https://github.com/lostisland/hurley] client:
+
+  # lib/correlated_client.rb
+
+  require 'hurley'
+  require 'request_store'
+
+  class Hurley::CorrelatedClient < Hurley::Client
+    def initialize(*args, &block)
+      super
+      header['Correlation-Id'] = ::RequestStore.store[:correlation_id]
+    end
+  end
+
+If you have long-lived Hurley clients, it is also possible to use the Hurley {callback
+machanism}[https://github.com/lostisland/hurley#client-callbacks] to add the
+outgoing headers:
+
+  client.before_call do |request|
+    request.header['Correlation-Id'] = ::RequestStore.store[:correlation_id]
+  end
+
+or 
+  
+  class Correlator
+    def name
+      :correlator
+    end
+
+    def call(request)
+      request.header['Correlation-Id'] = ::RequestStore.store[:correlation_id]
+    end
+  end
+
+  client.before_call(Correlator.new)
+
+
+

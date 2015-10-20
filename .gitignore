@@ -1,0 +1,6 @@
+*.gem
+pkg/
+doc/
+Gemfile.lock
+.DS_Store
+lib/.DS_Store
