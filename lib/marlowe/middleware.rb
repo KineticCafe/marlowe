@@ -1,5 +1,6 @@
 require 'rack'
 require 'request_store'
+require 'securerandom'
 
 module Marlowe
   # Marlowe correlation id middleware. Including this into your
