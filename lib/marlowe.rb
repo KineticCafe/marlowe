@@ -1,6 +1,6 @@
 # Marlowe, a correlation id injector.
 module Marlowe
-  VERSION = '1.0.0' #:nodoc:
+  VERSION = '1.0.1' #:nodoc:
 
   require 'marlowe/middleware'
   require 'marlowe/rails' if defined? Rails::Railtie

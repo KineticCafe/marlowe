@@ -1,4 +1,8 @@
+=== 1.0.1 / 2015-10-20
+
+* Update gemspec with homepage
+* Update Rakefile
+
 === 1.0.0 / 2015-10-16
 
 * Initial Commit
-

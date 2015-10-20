@@ -3,15 +3,15 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |s|
   s.name          = "marlowe"
-  s.version       = "1.0.0"
+  s.version       = "1.0.1"
   s.authors       = ["Trevor Oke", "Kinetic Cafe ALDO Team"]
   s.email         = ["toke@kineticcafe.com", "dev@kineticcafe.com"]
   s.description   = %q{Provides a correlation id header for Rails and Rack applications to correlate requests across multiple services.}
   s.summary       = %q{Correlation IDs for Rails and other Rack applications}
-  s.homepage      = "http://example.com" # set to actual value  FIX
+  s.homepage      = "https://github.com/KineticCafe/marlowe" 
   s.license       = "MIT"
 
-  s.extra_rdoc_files = ["History.rdoc", "Manifest.txt", "README.rdoc"]
+  s.extra_rdoc_files = ["History.rdoc", "Manifest.txt", "README.rdoc", "Licence.rdoc"]
 
   s.files         = `git ls-files`.split($/)
   s.test_files    = s.files.grep(%r{^(test|spec|features)/})
