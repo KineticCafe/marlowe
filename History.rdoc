@@ -1,3 +1,7 @@
+=== 1.0.2 / 2015-11-24
+
+* Add documentation for using Marlowe with {lograge}[https://github.com/roidrage/lograge]
+
 === 1.0.1 / 2015-10-20
 
 * Update gemspec with homepage

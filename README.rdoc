@@ -52,6 +52,23 @@ You can use this pattern if you've rolled your own logger/formatter:
     end
   end
 
+=== Lograge
+
+As {lograge}[https://github.com/roidrage/lograge] supplies it's own formatter,
+you will need to do something a little different:
+
+  # config/application.rb
+  
+  class Application < Rails::Application
+    config.before_initialize do
+      ...
+      # use lograge for all request logs
+      config.lograge.enabled = true
+      config.lograge.custom_options = lambda do |event|
+        { correlation_id: RequestStore[:correlation_id] }
+      end
+    end
+  end
 
 == Clients
 
@@ -94,6 +111,5 @@ or
   end
 
   client.before_call(Correlator.new)
-
 
 
