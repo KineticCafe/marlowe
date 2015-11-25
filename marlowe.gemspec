@@ -3,7 +3,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |s|
   s.name          = "marlowe"
-  s.version       = "1.0.1"
+  s.version       = "1.0.2"
   s.authors       = ["Trevor Oke", "Kinetic Cafe ALDO Team"]
   s.email         = ["toke@kineticcafe.com", "dev@kineticcafe.com"]
   s.description   = %q{Provides a correlation id header for Rails and Rack applications to correlate requests across multiple services.}
