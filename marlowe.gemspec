@@ -22,8 +22,11 @@ Gem::Specification.new do |s|
     s.specification_version = 4
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
+      s.add_runtime_dependency(%q<request_store>, ["~> 1.2"])
+      s.add_runtime_dependency(%q<rack>, ["< 2", ">= 0.9"])
       s.add_development_dependency(%q<minitest>, ["~> 5.8"])
       s.add_development_dependency(%q<rdoc>, ["~> 4.0"])
+      s.add_development_dependency(%q<rack-test>, ["~> 0.6"])
       s.add_development_dependency(%q<rake>, ["~> 10.0"])
       s.add_development_dependency(%q<hoe-doofus>, ["~> 1.0"])
       s.add_development_dependency(%q<hoe-gemspec2>, ["~> 1.1"])
@@ -36,8 +39,11 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<simplecov>, ["~> 0.7"])
       s.add_development_dependency(%q<hoe>, ["~> 3.14"])
     else
+      s.add_dependency(%q<request_store>, ["~> 1.2"])
+      s.add_dependency(%q<rack>, ["< 2", ">= 0.9"])
       s.add_dependency(%q<minitest>, ["~> 5.8"])
       s.add_dependency(%q<rdoc>, ["~> 4.0"])
+      s.add_dependency(%q<rack-test>, ["~> 0.6"])
       s.add_dependency(%q<rake>, ["~> 10.0"])
       s.add_dependency(%q<hoe-doofus>, ["~> 1.0"])
       s.add_dependency(%q<hoe-gemspec2>, ["~> 1.1"])
@@ -51,8 +57,11 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<hoe>, ["~> 3.14"])
     end
   else
+    s.add_dependency(%q<request_store>, ["~> 1.2"])
+    s.add_dependency(%q<rack>, ["< 2", ">= 0.9"])
     s.add_dependency(%q<minitest>, ["~> 5.8"])
     s.add_dependency(%q<rdoc>, ["~> 4.0"])
+    s.add_dependency(%q<rack-test>, ["~> 0.6"])
     s.add_dependency(%q<rake>, ["~> 10.0"])
     s.add_dependency(%q<hoe-doofus>, ["~> 1.0"])
     s.add_dependency(%q<hoe-gemspec2>, ["~> 1.1"])

@@ -20,6 +20,10 @@ Hoe.spec 'marlowe' do
 
   license 'MIT'
 
+  extra_deps << ['request_store', '~> 1.2']
+  extra_deps << ['rack',  '>= 0.9', '< 2']
+
+  extra_dev_deps << ['rack-test', '~> 0.6']
   self.extra_dev_deps << ['rake', '~> 10.0']
   self.extra_dev_deps << ['hoe-doofus', '~> 1.0']
   self.extra_dev_deps << ['hoe-gemspec2', '~> 1.1']
