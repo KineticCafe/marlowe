@@ -1,4 +1,5 @@
 .autotest
+Gemfile
 History.rdoc
 Licence.rdoc
 Manifest.txt
@@ -9,3 +10,5 @@ lib/marlowe/formatter.rb
 lib/marlowe/middleware.rb
 lib/marlowe/rails.rb
 lib/marlowe/simple_formatter.rb
+test/minitest_config.rb
+test/test_marlowe.rb
