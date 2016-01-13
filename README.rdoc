@@ -36,7 +36,7 @@ are included.
 
   # config/environments/development.rb
   Rails.application.configure do
-    config.log_formatter = CorrelatedSimpleFormatter.new
+    config.log_formatter = Marlowe::SimpleFormatter.new
   end
 
 
