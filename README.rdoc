@@ -18,8 +18,18 @@ or add it into a Gemfile:
 
 == Configuration
 
-There is no configuration as of yet. Future plans include configuring the name
-of the correlation id header.
+To configure the header where Marlowe looks for and puts the correlation id:
+
+- In Rails, specify the header in your environment configuration:
+
+  config.marlowe_correlation_header = "My-Correlation-Id"
+
+- If you are adding the middleware to a Rack application directly, pass it as an option:
+
+  use Marlowe::Middleware, correlation_header: "My-Correlation-Id"
+
+(Note that HTTP headers are case insensitive. In the Rack `env`, this header name is actually
+represented as `env['HTTP_MY_CORRELATION_ID']`.)
 
 == Accesing the Correlation ID
 

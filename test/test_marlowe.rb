@@ -16,4 +16,17 @@ class TestMarlowe < Minitest::Test
     refute_empty @app.coordination_id
     assert_equal 'testvalue', @app.coordination_id
   end
+
+  def test_with_custom_no_header
+    @customized_middleware = Marlowe::Middleware.new(@app, correlation_header: "Custom-Header")
+    @customized_middleware.call({})
+    refute_empty @app.coordination_id
+  end
+
+  def test_with_custom_header
+    @customized_middleware = Marlowe::Middleware.new(@app, correlation_header: "Custom-Header")
+    @customized_middleware.call({'HTTP_CUSTOM_HEADER' => 'testvalue'})
+    refute_empty @app.coordination_id
+    assert_equal 'testvalue', @app.coordination_id
+  end
 end
