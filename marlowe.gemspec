@@ -1,5 +1,5 @@
 # -*- encoding: utf-8 -*-
-# stub: marlowe 1.0.2 ruby lib
+# stub: marlowe 1.0.3 ruby lib
 
 Gem::Specification.new do |s|
   s.name = "marlowe"
