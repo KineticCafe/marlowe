@@ -1,3 +1,8 @@
+=== 1.0.3 / 2016-01-15
+
+* Update Readme example of using available formatted subclass
+* Make the correlation header name configurable
+
 === 1.0.2 / 2015-11-24
 
 * Add documentation for using Marlowe with {lograge}[https://github.com/roidrage/lograge]
