@@ -23,7 +23,7 @@ Gem::Specification.new do |s|
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<request_store>, ["~> 1.2"])
-      s.add_runtime_dependency(%q<rack>, ["< 2", ">= 0.9"])
+      s.add_runtime_dependency(%q<rack>, ["< 3", ">= 0.9"])
       s.add_development_dependency(%q<minitest>, ["~> 5.8"])
       s.add_development_dependency(%q<rdoc>, ["~> 4.0"])
       s.add_development_dependency(%q<rack-test>, ["~> 0.6"])
@@ -40,7 +40,7 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<hoe>, ["~> 3.14"])
     else
       s.add_dependency(%q<request_store>, ["~> 1.2"])
-      s.add_dependency(%q<rack>, ["< 2", ">= 0.9"])
+      s.add_dependency(%q<rack>, ["< 3", ">= 0.9"])
       s.add_dependency(%q<minitest>, ["~> 5.8"])
       s.add_dependency(%q<rdoc>, ["~> 4.0"])
       s.add_dependency(%q<rack-test>, ["~> 0.6"])
@@ -58,7 +58,7 @@ Gem::Specification.new do |s|
     end
   else
     s.add_dependency(%q<request_store>, ["~> 1.2"])
-    s.add_dependency(%q<rack>, ["< 2", ">= 0.9"])
+    s.add_dependency(%q<rack>, ["< 3", ">= 0.9"])
     s.add_dependency(%q<minitest>, ["~> 5.8"])
     s.add_dependency(%q<rdoc>, ["~> 4.0"])
     s.add_dependency(%q<rack-test>, ["~> 0.6"])
