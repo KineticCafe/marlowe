@@ -1,4 +1,4 @@
-# -*- ruby encoding: utf-8 -*-
+# frozen_string_literal: true
 
 gem 'minitest'
 
@@ -7,16 +7,5 @@ require 'rack/mock'
 require 'minitest/autorun'
 require 'minitest/focus'
 require 'minitest/moar'
-require 'minitest/bisect'
 
-require 'request_store'
 require 'marlowe'
-
-class RackApp
-  def call(env)
-  end
-
-  def coordination_id
-    RequestStore[:correlation_id]
-  end
-end

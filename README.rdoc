@@ -1,37 +1,104 @@
-= marlowe
+= Marlowe, Your Request Sleuth
+
+code :: https://github.com/KineticCafe/marlowe/
+issues :: https://github.com/KineticCafe/marlowe/issues
+docs :: http://www.rubydoc.info/github/KineticCafe/marlowe/master
+continuous integration :: {<img src="https://travis-ci.org/KineticCafe/marlowe.svg?branch=master" alt="Build Status" />}[https://travis-ci.org/KineticCafe/marlowe]
 
 == Description
 
-{marlowe}[https://github.com/KineticCafe/marlowe] provides a correlation id 
-header for Rails and Rack applications to correlate logs for a single request 
-across multiple services.
+{Marlowe}[https://github.com/KineticCafe/marlowe] is a Rack middleware that
+extracts or creates a request ID using a pre-defined header, permitting request
+correlation across multiple services.
 
-== Install
+When using Rails, Marlowe automatically adds itself to the middleware before
+<tt>Rails::Rack::Logger</tt>.
 
-You can install it as a gem:
+=== Upgrading from Marlowe 1.x
 
-  $ gem install marlowe
+In Marlowe 1.0, the correlation header was called <tt>Correlation-Id</tt>;
+since then, Rails 5 and other tools and frameworks (such as Phoenix) have
+standardized on the header <tt>X-Request-Id</tt>. Marlowe 2.0 changes to this
+header by default.
 
-or add it into a Gemfile:
+To keep complete compatibility with Marlowe 1.0, the following should be used:
 
-  gem 'marlowe'
+  # Rails
+  config.marlowe_header = 'Correlation-Id'
+  config.marlowe_handler = :simple
+  config.marlowe_return = false
+
+  # Rack
+  use Marlowe::Middleware, header: 'Correlation-Id', handler: :simple, return: false
 
 == Configuration
 
-To configure the header where Marlowe looks for and puts the correlation id:
+Marlowe has three main configuration options: the request ID header, the
+request ID handler, and the request ID return. The options may be provided to
+the Rack +use+ command as a keyword option, or set in a corresponding
+<tt>marlowe_<em>option</em></tt> configuration variable in Rails.
 
-- In Rails, specify the header in your environment configuration:
+=== Request ID Header
 
-  config.marlowe_correlation_header = "My-Correlation-Id"
+Specifies the header to be used for the request correlation ID. Defaults to
+<tt>X-Request-Id</tt>.
 
-- If you are adding the middleware to a Rack application directly, pass it as an option:
+    # Rails
+    config.marlowe_header = 'Correlation-Id'
+    # OR: config.marlowe_correlation_header = 'Correlation-Id'
 
-  use Marlowe::Middleware, correlation_header: "My-Correlation-Id"
+    # Rack
+    use Marlowe::Middleware, header: 'Correlation-Id'
+    # OR: use Marlowe::Middleware, correlation_header: 'Correlation-Id'
 
-(Note that HTTP headers are case insensitive. In the Rack `env`, this header name is actually
-represented as `env['HTTP_MY_CORRELATION_ID']`.)
+Marlowe will convert this to an appropriate HTTP header (in the Rack +env+
+parameter, the above header would be represented as
+<tt>env['HTTP_CORRELATION_ID']</tt>).
 
-== Accesing the Correlation ID
+=== Request ID Handler
+
+Specifies the method for sanitizing or generating the request correlation ID.
+Values can be <tt>:clean</tt> (the default, which limits incoming correlation
+IDs to 255 alphanumeric-or-dash characters), <tt>:simple</tt> (does not limit
+incoming correlation IDs), or a proc to transform or generate a correlation ID.
+
+In all cases, if a correlation request ID is not handled, a UUID will be
+generated.
+
+    # Rails
+    config.marlowe_handler = :simple
+    config.marlowe_handler = ->(req_id) {
+      req_id.try(:reverse) || SecureRandom.uuid
+    }
+
+    # Rack
+    use Marlowe::Middleware, handler: :simple
+    use Marlowe::Middleware, handler: ->(req_id) {
+      req_id.try(:reverse) || SecureRandom.uuid
+    }
+
+=== Request ID Return
+
+If +true+ (the default), the request correlation ID will be returned to the
+client in the same header that it was provided in.
+
+    # Rails
+    config.marlowe_return = false
+
+    # Rack
+    use Marlowe::Middleware, return: false
+
+=== Using Marlowe with Rails 5
+
+Rails 5 includes the <tt>ActionDispatch::RequestId</tt> middleware, reducing
+the need for Marlowe. Marlowe is more configurable than the Rails 5 default, so
+set +marlowe_replace_action_dispatch_request_id+ to true to have
+<tt>Marlowe::Middleware</tt> will replace <tt>ActionDispatch::RequestId</tt>:
+
+  # Rails only
+  config.marlowe_replace_action_dispatch_request_id = true
+
+== Accessing the Correlation ID
 
 The correlation id can be accessed throughout the application by accessing the
 {RequestStore}[https://github.com/steveklabnik/request_store] storage.
@@ -40,15 +107,14 @@ The correlation id can be accessed throughout the application by accessing the
 
 == Logging
 
-For a rails application, you simply need to change the log formatter to one of
-the provided ones. Correlated versions of both the SimpleFormatter and Formatter 
-are included. 
+For a Rails application, you simply need to change the log formatter to one of
+the provided ones. Correlated versions of both the SimpleFormatter and
+Formatter are included. 
 
   # config/environments/development.rb
   Rails.application.configure do
     config.log_formatter = Marlowe::SimpleFormatter.new
   end
-
 
 To create your own formatter, you'll need to access the RequestStore storage.
 You can use this pattern if you've rolled your own logger/formatter:
@@ -64,7 +130,7 @@ You can use this pattern if you've rolled your own logger/formatter:
 
 === Lograge
 
-As {lograge}[https://github.com/roidrage/lograge] supplies it's own formatter,
+As {lograge}[https://github.com/roidrage/lograge] supplies its own formatter,
 you will need to do something a little different:
 
   # config/application.rb
@@ -84,7 +150,7 @@ you will need to do something a little different:
 
 Catching and creating the correlation ID is a great all on its own, but to
 really take advantage of the correlation in a service based architecture you'll
-need to pass the id to the next service in the change.
+need to pass the request ID to the next service in the change.
 
 Here's an example of a {Hurley}[https://github.com/lostisland/hurley] client:
 
@@ -96,16 +162,16 @@ Here's an example of a {Hurley}[https://github.com/lostisland/hurley] client:
   class Hurley::CorrelatedClient < Hurley::Client
     def initialize(*args, &block)
       super
-      header['Correlation-Id'] = ::RequestStore.store[:correlation_id]
+      header['X-Request-Id'] = ::RequestStore.store[:correlation_id]
     end
   end
 
-If you have long-lived Hurley clients, it is also possible to use the Hurley {callback
-machanism}[https://github.com/lostisland/hurley#client-callbacks] to add the
-outgoing headers:
+If you have long-lived Hurley clients, it is also possible to use the Hurley
+{callback machanism}[https://github.com/lostisland/hurley#client-callbacks] to
+add the outgoing headers:
 
   client.before_call do |request|
-    request.header['Correlation-Id'] = ::RequestStore.store[:correlation_id]
+    request.header['X-Request-Id'] = ::RequestStore.store[:correlation_id]
   end
 
 or 
@@ -116,10 +182,36 @@ or
     end
 
     def call(request)
-      request.header['Correlation-Id'] = ::RequestStore.store[:correlation_id]
+      request.header['X-Request-Id'] = ::RequestStore.store[:correlation_id]
     end
   end
 
   client.before_call(Correlator.new)
 
+== Install
 
+Add Marlowe to your Gemfile:
+
+    gem 'marlowe', '~> 2.0'
+
+Or manually install:
+
+  $ gem install marlowe
+
+== Marlowe Semantic Versioning
+
+Marlowe uses a {Semantic Versioning}[http://semver.org/] scheme with one
+significant change:
+
+* When PATCH is zero (+0+), it will be omitted from version references.
+
+Additionally, the major version will generally be reserved for plug-in
+infrastructure changes.
+
+== Community and Contributing
+
+Marlowe welcomes your contributions as described in
+{Contributing.md}[https://github.com/KineticCafe/marlowe/blob/master/Contributing.md].
+This project, like all Kinetic Cafe {open source
+projects}[https://github.com/KineticCafe], is under the Kinetic Cafe Open
+Source {Code of Conduct}[https://github.com/KineticCafe/code-of-conduct].
