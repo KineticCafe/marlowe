@@ -1,7 +1,6 @@
-.autotest
-Gemfile
-History.rdoc
-Licence.rdoc
+Contributing.md
+History.md
+Licence.md
 Manifest.txt
 README.rdoc
 Rakefile

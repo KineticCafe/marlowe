@@ -12,5 +12,3 @@ module Marlowe
     end
   end
 end
-
-

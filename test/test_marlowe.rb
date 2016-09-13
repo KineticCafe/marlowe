@@ -1,32 +1,102 @@
+# frozen_string_literal: true
+
 require 'minitest_config'
 
 class TestMarlowe < Minitest::Test
+  include Rack::Test::Methods
+
+  attr_reader :marlowe_options
+
   def setup
-    @app = RackApp.new
-    @middleware = Marlowe::Middleware.new(@app)
+    @marlowe_options = {}
   end
 
-  def test_no_header
-    @middleware.call({})
-    refute_empty @app.coordination_id
+  def app
+    options = marlowe_options
+    Rack::Builder.new do
+      use Marlowe::Middleware, options
+
+      run lambda { |_env|
+        [
+          200,
+          { 'Content-Type' => 'text/plain' },
+          [ RequestStore[:correlation_id] ]
+        ]
+      }
+    end
   end
 
-  def test_with_header
-    @middleware.call({'HTTP_CORRELATION_ID' => 'testvalue'})
-    refute_empty @app.coordination_id
-    assert_equal 'testvalue', @app.coordination_id
+  def test_default_config_no_header_value
+    get '/'
+    assert last_response.header.key?('X-Request-Id')
+    refute_empty last_response.header['X-Request-Id']
+    assert_equal last_response.header['X-Request-Id'], last_response.body
   end
 
-  def test_with_custom_no_header
-    @customized_middleware = Marlowe::Middleware.new(@app, correlation_header: "Custom-Header")
-    @customized_middleware.call({})
-    refute_empty @app.coordination_id
+  def test_default_config_with_header_value
+    get '/', {}, { 'HTTP_X_REQUEST_ID' => 'testvalue' }
+    assert last_response.header.key?('X-Request-Id')
+    refute_empty last_response.header['X-Request-Id']
+    assert_equal last_response.header['X-Request-Id'], last_response.body
+    assert_equal 'testvalue', last_response.header['X-Request-Id']
   end
 
-  def test_with_custom_header
-    @customized_middleware = Marlowe::Middleware.new(@app, correlation_header: "Custom-Header")
-    @customized_middleware.call({'HTTP_CUSTOM_HEADER' => 'testvalue'})
-    refute_empty @app.coordination_id
-    assert_equal 'testvalue', @app.coordination_id
+  def test_header_config_no_header_value
+    marlowe_options[:header] = 'Correlation-Id'
+    get '/'
+    assert last_response.header.key?('Correlation-Id')
+    refute_empty last_response.header['Correlation-Id']
+    assert_equal last_response.header['Correlation-Id'], last_response.body
+  end
+
+  def test_header_config_no_header_with_header_value
+    marlowe_options[:header] = 'Correlation-Id'
+    get '/', {}, { 'HTTP_CORRELATION_ID' => 'testvalue' }
+    assert last_response.header.key?('Correlation-Id')
+    refute_empty last_response.header['Correlation-Id']
+    assert_equal last_response.header['Correlation-Id'], last_response.body
+    assert_equal 'testvalue', last_response.header['Correlation-Id']
+  end
+
+  def test_handler_config_default_handler
+    get '/', {}, { 'HTTP_X_REQUEST_ID' => 'test+value' }
+    assert last_response.header.key?('X-Request-Id')
+    refute_empty last_response.header['X-Request-Id']
+    assert_equal last_response.header['X-Request-Id'], last_response.body
+    assert_equal 'testvalue', last_response.header['X-Request-Id']
+  end
+
+  def test_handler_config_with_simple_handler
+    marlowe_options[:handler] = :simple
+    get '/', {}, { 'HTTP_X_REQUEST_ID' => 'test+value' }
+    assert last_response.header.key?('X-Request-Id')
+    refute_empty last_response.header['X-Request-Id']
+    assert_equal last_response.header['X-Request-Id'], last_response.body
+    assert_equal 'test+value', last_response.header['X-Request-Id']
+  end
+
+  def test_handler_config_with_proc_handler
+    marlowe_options[:handler] = ->(item) { item && item.reverse || SecureRandom.uuid }
+    get '/', {}, { 'HTTP_X_REQUEST_ID' => 'test+value' }
+    assert last_response.header.key?('X-Request-Id')
+    refute_empty last_response.header['X-Request-Id']
+    assert_equal last_response.header['X-Request-Id'], last_response.body
+    assert_equal 'eulav+tset', last_response.header['X-Request-Id']
+  end
+
+  def test_handler_config_with_proc_handler_returning_nil
+    marlowe_options[:handler] = ->(item) { nil }
+    get '/', {}, { 'HTTP_X_REQUEST_ID' => 'test+value' }
+    assert last_response.header.key?('X-Request-Id')
+    refute_empty last_response.header['X-Request-Id']
+    assert_equal last_response.header['X-Request-Id'], last_response.body
+    assert_match(/\A[-\w]+\z/, last_response.header['X-Request-Id'])
+  end
+
+  def test_return_config_false
+    marlowe_options[:return] = false
+    get '/'
+    refute last_response.header.key?('X-Request-Id')
+    assert_equal RequestStore[:correlation_id], last_response.body
   end
 end
