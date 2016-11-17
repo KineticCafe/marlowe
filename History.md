@@ -1,4 +1,4 @@
-### 2.0 / 2016-09-DD
+### 2.0 / 2016-11-16
 
 *   Breaking change: the correlation header defaults to `X-Request-Id` instead
     of `Correlation-Id`.

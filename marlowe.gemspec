@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.require_paths = ["lib"]
   s.authors = ["Trevor Oke", "Kinetic Cafe"]
-  s.date = "2016-09-12"
+  s.date = "2016-11-17"
   s.description = "{Marlowe}[https://github.com/KineticCafe/marlowe] is a Rack middleware that\nextracts or creates a request ID using a pre-defined header, permitting request\ncorrelation across multiple services.\n\nWhen using Rails, Marlowe automatically adds itself to the middleware before\n<tt>Rails::Rack::Logger</tt>."
   s.email = ["toke@kineticcafe.com", "dev@kineticcafe.com"]
   s.extra_rdoc_files = ["Contributing.md", "History.md", "Licence.md", "Manifest.txt", "README.rdoc"]
@@ -27,7 +27,6 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<request_store>, ["~> 1.2"])
       s.add_runtime_dependency(%q<rack>, ["< 3", ">= 0.9"])
       s.add_development_dependency(%q<minitest>, ["~> 5.9"])
-      s.add_development_dependency(%q<rdoc>, ["~> 4.0"])
       s.add_development_dependency(%q<appraisal>, ["~> 2.1"])
       s.add_development_dependency(%q<hoe-doofus>, ["~> 1.0"])
       s.add_development_dependency(%q<hoe-gemspec2>, ["~> 1.1"])
@@ -40,6 +39,7 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<minitest-moar>, ["~> 0.0"])
       s.add_development_dependency(%q<rack-test>, ["~> 0.6"])
       s.add_development_dependency(%q<rake>, ["< 12", ">= 10.0"])
+      s.add_development_dependency(%q<rdoc>, ["~> 4.2"])
       s.add_development_dependency(%q<rubocop>, ["~> 0.32"])
       s.add_development_dependency(%q<coveralls>, ["~> 0.8"])
       s.add_development_dependency(%q<simplecov>, ["~> 0.7"])
@@ -48,7 +48,6 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<request_store>, ["~> 1.2"])
       s.add_dependency(%q<rack>, ["< 3", ">= 0.9"])
       s.add_dependency(%q<minitest>, ["~> 5.9"])
-      s.add_dependency(%q<rdoc>, ["~> 4.0"])
       s.add_dependency(%q<appraisal>, ["~> 2.1"])
       s.add_dependency(%q<hoe-doofus>, ["~> 1.0"])
       s.add_dependency(%q<hoe-gemspec2>, ["~> 1.1"])
@@ -61,6 +60,7 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<minitest-moar>, ["~> 0.0"])
       s.add_dependency(%q<rack-test>, ["~> 0.6"])
       s.add_dependency(%q<rake>, ["< 12", ">= 10.0"])
+      s.add_dependency(%q<rdoc>, ["~> 4.2"])
       s.add_dependency(%q<rubocop>, ["~> 0.32"])
       s.add_dependency(%q<coveralls>, ["~> 0.8"])
       s.add_dependency(%q<simplecov>, ["~> 0.7"])
@@ -70,7 +70,6 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<request_store>, ["~> 1.2"])
     s.add_dependency(%q<rack>, ["< 3", ">= 0.9"])
     s.add_dependency(%q<minitest>, ["~> 5.9"])
-    s.add_dependency(%q<rdoc>, ["~> 4.0"])
     s.add_dependency(%q<appraisal>, ["~> 2.1"])
     s.add_dependency(%q<hoe-doofus>, ["~> 1.0"])
     s.add_dependency(%q<hoe-gemspec2>, ["~> 1.1"])
@@ -83,6 +82,7 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<minitest-moar>, ["~> 0.0"])
     s.add_dependency(%q<rack-test>, ["~> 0.6"])
     s.add_dependency(%q<rake>, ["< 12", ">= 10.0"])
+    s.add_dependency(%q<rdoc>, ["~> 4.2"])
     s.add_dependency(%q<rubocop>, ["~> 0.32"])
     s.add_dependency(%q<coveralls>, ["~> 0.8"])
     s.add_dependency(%q<simplecov>, ["~> 0.7"])
