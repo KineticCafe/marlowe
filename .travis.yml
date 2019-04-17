@@ -1,17 +1,17 @@
 language: ruby
 
 rvm:
-  - 2.3.1
-  - 2.2.5
-  - 2.1.9
-  - 2.0
+  - 2.6.1
+  - 2.5.3
+  - 2.4.5
+  - 2.3.8
+  - jruby-9.2.5.0
   - jruby-9.1.2.0
-  - jruby-9.0.5.0
   - ruby-head
   - jruby-head
 
 gemfile:
-  - gemfiles/rack_1.6.gemfile
+  - gemfiles/rack_1.x.gemfile
   - gemfiles/rack_2.gemfile
 
 bundler_args: --path vendor/bundle
@@ -34,11 +34,6 @@ before_install:
   - bundle config --local without local_development
 
 matrix:
-  exclude:
-    - rvm: 2.1.9
-      gemfile: gemfiles/rack_2.gemfile
-    - rvm: 2.0
-      gemfile: gemfiles/rack_2.gemfile
   allow_failures:
     - rvm: jruby-head
     - rvm: ruby-head
@@ -48,9 +43,3 @@ notifications:
   email:
     on_success: change
     on_failure: always
-  hipchat:
-    on_success: change
-    on_failure: always
-    notify: true
-    rooms:
-      secure: CbG+RlNoPO4KWPLNcrJ/5j/hjlNcQD/XSnM7ebFA1WmajZOvkfArb/4Z9rcwfLMFAvZKHM+2l4J4+natvrfgQ9aTq9dQXQeF5AEFJlbbHrD6q7neAw/ER2xpoQ1I6SwbBTW81YIKXzXjK4eA83QxDRzT14x8hOeAFlMEUfCoRoyr+X6Y/TMii9CcRSf4AIumi4C7TFMV/rvggbTjuXXk3RjS+YYe/YQmFOcinHHJMf1A2s5aoOOPPKhL0i37Do15WgvhexOCj92CDfGfLEL5bM0SuBSuFTGQX7BCaemUcS9amKJgzTeULexgfZ0YD0BRAJV7p2CEVIwrhEei1EHG/3vF6ReiFkMTJN35PSDnpzGgb8jhYpvQx9xm3x1iwTFpiWhD83Q5sC6BlEZXkH1LaU8SSgQNYcgcUKWJ2Tgkf4Y16JCW6sEruyAxg0SiZNrHJKjhpdeKHzEPcngLLXAxpBMaYiZsZm2MTU85bZodhvuBY5vcvo/BpNmPPY5k+B96yrUXsmPOgHtXls2POOVCYKRsbdjDYi0/s/KvHNPeSO+caQ8HnQVlxBs2uZRy/hryiDQWJVKX5MyvTnf7oWUmln5a2VWSXZUtokHyqnCYT9BST3IBVEKRDrP0vtcXAVBgQj1BLrdzsEEVE7w6Nxr3zRxDIH6WDn44cCMvWscXLi4=

@@ -5,9 +5,12 @@ Manifest.txt
 README.rdoc
 Rakefile
 lib/marlowe.rb
+lib/marlowe/config.rb
+lib/marlowe/faraday.rb
 lib/marlowe/formatter.rb
 lib/marlowe/middleware.rb
 lib/marlowe/rails.rb
 lib/marlowe/simple_formatter.rb
 test/minitest_config.rb
 test/test_marlowe.rb
+test/test_marlowe_config.rb

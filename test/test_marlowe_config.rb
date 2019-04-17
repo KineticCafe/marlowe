@@ -2,7 +2,7 @@
 
 require 'minitest_config'
 
-class TestMarlowe < Minitest::Test
+class TestMarloweConfig < Minitest::Test
   include Rack::Test::Methods
 
   attr_reader :marlowe_options
@@ -13,6 +13,12 @@ class TestMarlowe < Minitest::Test
   end
 
   def app
+    Marlowe.configure do |config|
+      marlowe_options.each do |k, v|
+        config.send(:"#{k}=", v) if config.respond_to?(:"#{k}=")
+      end
+    end
+
     options = marlowe_options
     Rack::Builder.new do
       use Marlowe::Middleware, options

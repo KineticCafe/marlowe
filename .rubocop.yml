@@ -1,12 +1,12 @@
 ---
 AllCops:
-  Include:
-    - '**/config.rb'
   Exclude:
     - 'bin/**/*'
     - 'config/**/*'
     - 'script/**/*'
     - 'tmp/**/*'
+    - '*.gemspec'
+    - 'gemfiles/*.gemfile'
   DisplayCopNames: true
   DisplayStyleGuide: true
   ExtraDetails: true
@@ -55,11 +55,11 @@ Metrics/PerceivedComplexity:
 # } Performance cops
 
 # { Style cops
-Style/AlignHash:
+Layout/AlignHash:
   EnforcedHashRocketStyle: key
   EnforcedColonStyle: key
 
-Style/AlignParameters:
+Layout/AlignParameters:
   EnforcedStyle: with_fixed_indentation
 
 Style/AndOr:
@@ -111,7 +111,7 @@ Style/Documentation:
     - 'app/**/*'
     - 'test/**/*'
 
-Style/DotPosition:
+Layout/DotPosition:
   EnforcedStyle: trailing
 
 Style/DoubleNegation:
@@ -122,11 +122,12 @@ Style/EmptyElse:
   EnforcedStyle: empty
 
 # Don't allow by default, but permit on a file-by-file basis by exclusion.
-Style/FileName:
+Naming/FileName:
   Exclude:
     - Appraisals
     - Gemfile
     - Rakefile # WTF? This should be excluded by default.
+    - .simplecov-prelude.rb
 
 # I prefer `str % args`; the style guide suggests `str.format(args)`.
 Style/FormatString:
@@ -137,10 +138,6 @@ Style/GlobalVars:
 
 Style/SpecialGlobalVars:
   Enabled: false
-
-# Make this match Metrics/LineLength
-Style/IfUnlessModifier:
-  MaxLineLength: 90
 
 # I prefer `->(){}` to `lambda{||}`
 Style/Lambda:
@@ -156,18 +153,14 @@ Style/MethodDefParentheses:
     - 'test/support/**/*'
     - 'test/minitest_config.rb'
 
-Style/MultilineMethodCallIndentation:
+Layout/MultilineMethodCallIndentation:
   EnforcedStyle: indented
 
-Style/MultilineOperationIndentation:
+Layout/MultilineOperationIndentation:
   EnforcedStyle: indented
 
 Style/RegexpLiteral:
   EnforcedStyle: mixed
-
-# I prefer spaces in brackets for array declarations, unless empty.
-Style/SpaceInsideBrackets:
-  Enabled: false
 
 Style/SignalException:
   EnforcedStyle: semantic
@@ -175,11 +168,7 @@ Style/SignalException:
 Style/SymbolArray:
   Enabled: true
 
-# Make this match Metrics/LineLength
-Style/WhileUntilModifier:
-  MaxLineLength: 90
-
-Style/MethodName:
+Naming/MethodName:
   Exclude: []
 
 # Parallel assignment is correct.
@@ -197,15 +186,15 @@ Style/CollectionMethods:
   Enabled: true
 
 # If an array is a multi-line array, it should start that way, too.
-Style/FirstArrayElementLineBreak:
+Layout/FirstArrayElementLineBreak:
   Enabled: true
 
 # If a hash is a multi-line hash, it should start that way, too.
-Style/FirstHashElementLineBreak:
+Layout/FirstHashElementLineBreak:
   Enabled: true
 
 # If a method call is broken over multiple lines, it should start that way, too.
-Style/FirstMethodArgumentLineBreak:
+Layout/FirstMethodArgumentLineBreak:
   Enabled: true
 
 Style/StringMethods:

@@ -1,4 +1,6 @@
-appraise 'rack-1.6' do
+# frozen_string_literal: true
+
+appraise 'rack-1.x' do
   gem 'rack', '~> 1.6'
 end
 

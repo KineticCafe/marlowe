@@ -6,11 +6,11 @@ require 'securerandom'
 
 module Marlowe
   # Marlowe correlation id middleware. Including this into your middleware
-  # stack will add a correlation id header as an incoming request, and save
-  # that id in a request session variable.
+  # stack will capture or add a correlation id header on an incoming request,
+  # and save that id in a request session variable.
   class Middleware
     # The name of the default header to look for and put the correlation id in.
-    CORRELATION_HEADER = 'X-Request-Id' #:nodoc:
+    CORRELATION_HEADER = Marlowe::Config::CORRELATION_HEADER # :nodoc:
 
     # Configure the Marlowe middleware to call +app+ with options +opts+.
     #
@@ -31,67 +31,36 @@ module Marlowe
     # <tt>:action_dispatch</tt>:: If +true+, Marlowe will add code to behave
     #                             like <tt>ActionDispatch::RequestId</tt>.
     #                             Depends on <tt>ActionDispatch::Request</tt>.
-    def initialize(app, opts = {})
+    def initialize(app, opts = nil)
       @app = app
-      @header, @http_header = format_header_name(
-        opts[:header] || opts[:correlation_header] || CORRELATION_HEADER
-      )
-      @handler = opts.fetch(:handler, :clean)
-      @return = opts.fetch(:return, true)
-      @action_dispatch = opts.fetch(:action_dispatch, false)
+      @config = Marlowe::Config.override(opts)
     end
 
     # Stores the incoming correlation id from the +env+ hash. If the correlation
     # id has not been sent, a new UUID is generated and the +env+ is modified.
     def call(env)
-      req_id = make_request_id(env[@http_header])
-      RequestStore.store[:correlation_id] = env[@http_header] = req_id
+      req_id = Marlowe.make_request_id(env[config.http_header], config)
+      RequestStore.store[:correlation_id] = env[config.http_header] = req_id
 
-      if @action_dispatch
+      if config.action_dispatch
         req = ActionDispatch::Request.new(env)
         req.request_id = req_id
       end
 
-      @app.call(env).tap { |_status, headers, _body|
-        if @return
-          headers[@header] = if @action_dispatch
-                               req.request_id
-                             else
-                               RequestStore.store[:correlation_id]
-                             end
+      app.call(env).tap { |_status, headers, _body|
+        if config.return
+          headers[config.header] =
+            if config.action_dispatch
+              req.request_id
+            else
+              RequestStore.store[:correlation_id]
+            end
         end
       }
     end
 
     private
 
-    def format_header_name(header)
-      [
-        header.to_s.tr('_', '-').freeze,
-        "HTTP_#{header.to_s.tr('-', '_').upcase}"
-      ]
-    end
-
-    def make_request_id(request_id)
-      if @handler == :simple
-        simple(request_id)
-      elsif @handler.kind_of?(Proc)
-        simple(@handler.call(request_id))
-      else
-        clean(request_id)
-      end
-    end
-
-    def clean(request_id)
-      simple(request_id).gsub(/[^\w\-]/, '')[0, 255]
-    end
-
-    def simple(request_id)
-      if request_id && !request_id.empty? && request_id !~ /\A[[:space]]*\z/
-        request_id
-      else
-        SecureRandom.uuid
-      end
-    end
+    attr_reader :app, :config
   end
 end

@@ -24,7 +24,7 @@ spec = Hoe.spec 'marlowe' do
   ruby20!
 
   extra_deps << ['request_store', '~> 1.2']
-  extra_deps << ['rack',  '>= 0.9', '< 3']
+  extra_deps << ['rack', '>= 0.9', '< 3']
 
   extra_dev_deps << ['appraisal', '~> 2.1']
   extra_dev_deps << ['hoe-doofus', '~> 1.0']

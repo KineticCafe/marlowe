@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'request_store'
 
 module Marlowe
@@ -5,7 +7,6 @@ module Marlowe
   # +ActiveSupport::Logger::SimpleFormatter+ that adds a correlation id
   # string to a rails log.
   class SimpleFormatter < ActiveSupport::Logger::SimpleFormatter
-
     # Overrides the formatter return to add the correlation id.
     def call(severity, timestamp, progname, msg)
       "[#{RequestStore.store[:correlation_id]}] #{super}"
