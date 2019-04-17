@@ -23,7 +23,7 @@ spec = Hoe.spec "marlowe" do
   require_ruby_version ">= 2.0", "< 4"
 
   extra_deps << ["request_store", "~> 1.2"]
-  extra_deps << ["rack", ">= 0.9", "< 3"]
+  extra_deps << ["rack", ">= 1", "< 4"]
 
   extra_dev_deps << ["appraisal", "~> 2.1"]
   extra_dev_deps << ["hoe-doofus", "~> 1.0"]
@@ -35,7 +35,7 @@ spec = Hoe.spec "marlowe" do
   extra_dev_deps << ["minitest-bonus-assertions", "~> 3.0"]
   extra_dev_deps << ["minitest-focus", "~> 1.1"]
   extra_dev_deps << ["minitest-moar", "~> 0.0"]
-  extra_dev_deps << ["rack-test", "~> 1.0"]
+  extra_dev_deps << ["rack-test", "~> 2.0"]
   extra_dev_deps << ["rake", ">= 10.0", "< 14"]
   extra_dev_deps << ["rdoc", ">= 4.2"]
   extra_dev_deps << ["standard", "~> 1.0"]
@@ -45,7 +45,7 @@ end
 
 ENV["RUBYOPT"] = "-W0"
 
-module Hoe::Publish #:nodoc:
+module Hoe::Publish # :nodoc:
   alias_method :__make_rdoc_cmd__marlowe__, :make_rdoc_cmd
 
   def make_rdoc_cmd(*extra_args) # :nodoc:

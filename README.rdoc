@@ -14,7 +14,41 @@ correlation across multiple services.
 When using Rails, Marlowe automatically adds itself to the middleware before
 <tt>Rails::Rack::Logger</tt>.
 
-=== Upgrading from Marlowe 1.x
+As of Marlowe 3.0, a Faraday middleware is provided (<tt>require 'marlowe/faraday'</tt>).
+
+=== Upgrading
+
+==== from Marlowe 2.0
+
+In Marlowe 2.0, configuration was entirely specified in Rails configuration or
+in the Rack +use+ clause. With the addition of a Faraday middleware for use with
+Marlowe, centralization of the configuration is advisable.
+
+The existing configuration mechanisms will work (and create instance
+configurations if provided), but it is instead recommended to use the global
+configuration:
+
+  # Compatibility with Marlowe 1.0
+  Marlowe.configure do |config|
+    config.header = 'Correlation-ID'
+    config.handler = :simple
+    config.return = false
+  end
+
+Configuration is static for Marlowe::Middleware or Marlowe::Faraday instances
+and changes to Marlowe configuration only affect *new* instances. If the
+configuration options are provided in the middleware +use+ clause, they will
+override the configured values.
+
+  Marlowe.configure do |config|
+    config.header = 'Correlation-ID'
+    config.handler = :simple
+    config.return = false
+  end
+  use Marlowe::Middleware, handler: :clean
+  # The handler will be the :clean handler for the used middleware.
+
+==== from Marlowe 1.x
 
 In Marlowe 1.0, the correlation header was called <tt>Correlation-Id</tt>;
 since then, Rails 5 and other tools and frameworks (such as Phoenix) have
@@ -109,7 +143,7 @@ The correlation id can be accessed throughout the application by accessing the
 
 For a Rails application, you simply need to change the log formatter to one of
 the provided ones. Correlated versions of both the SimpleFormatter and
-Formatter are included. 
+Formatter are included.
 
   # config/environments/development.rb
   Rails.application.configure do
@@ -134,7 +168,7 @@ As {lograge}[https://github.com/roidrage/lograge] supplies its own formatter,
 you will need to do something a little different:
 
   # config/application.rb
-  
+
   class Application < Rails::Application
     config.before_initialize do
       ...
@@ -146,47 +180,39 @@ you will need to do something a little different:
     end
   end
 
+=== SemanticLogger
+
+As {semantic_logger}[https://github.com/rocketjob/semantic_logger] provides its
+own formatters this should be added as a tag. The best way that I can see to do
+this is to capture the +correlation_id+ in an +on_log+ event:
+
+  # config/initializers/semantic_logger.rb
+
+  SemanticLogger.on_log do |log|
+    if RequestStore[:correlation_id]
+      log.named_tags[:correlation_id] = RequestStore[:correlation_id]
+    end
+  end
+
 == Clients
 
 Catching and creating the correlation ID is a great all on its own, but to
 really take advantage of the correlation in a service based architecture you'll
 need to pass the request ID to the next service in the change.
 
-Here's an example of a {Hurley}[https://github.com/lostisland/hurley] client:
+Here's an example with {Faraday}[https://github.com/lostisland/faraday]:
 
-  # lib/correlated_client.rb
+    require 'faraday'
+    require 'faraday_middleware'
+    require 'marlowe/faraday'
 
-  require 'hurley'
-  require 'request_store'
+    conn = Faraday.new(url: 'https://example.org/') do |conn|
+      conn.request :marlowe
+      conn.request :json
 
-  class Hurley::CorrelatedClient < Hurley::Client
-    def initialize(*args, &block)
-      super
-      header['X-Request-Id'] = ::RequestStore.store[:correlation_id]
+      conn.response :json
+      conn.adapter Faraday.default_adapter
     end
-  end
-
-If you have long-lived Hurley clients, it is also possible to use the Hurley
-{callback machanism}[https://github.com/lostisland/hurley#client-callbacks] to
-add the outgoing headers:
-
-  client.before_call do |request|
-    request.header['X-Request-Id'] = ::RequestStore.store[:correlation_id]
-  end
-
-or 
-  
-  class Correlator
-    def name
-      :correlator
-    end
-
-    def call(request)
-      request.header['X-Request-Id'] = ::RequestStore.store[:correlation_id]
-    end
-  end
-
-  client.before_call(Correlator.new)
 
 == Install
 
