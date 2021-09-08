@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
   s.homepage = "https://github.com/KineticCafe/marlowe/"
   s.licenses = ["MIT"]
   s.rdoc_options = ["--main", "README.rdoc"]
-  s.required_ruby_version = Gem::Requirement.new("~> 2.0")
+  s.required_ruby_version = Gem::Requirement.new("~> 2.0"), Gem::Requirement.new("< 4")
   s.rubygems_version = "2.5.1"
   s.summary = "{Marlowe}[https://github.com/KineticCafe/marlowe] is a Rack middleware that extracts or creates a request ID using a pre-defined header, permitting request correlation across multiple services"
 
