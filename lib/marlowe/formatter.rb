@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'request_store'
+require "request_store"
 
 module Marlowe
   # Marlowe::Formatter is a subclass of +ActiveSupport::Logger::Formatter+

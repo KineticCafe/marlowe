@@ -1,0 +1,4 @@
+parallel: true
+ruby_version: 2.6
+ignore:
+  - 'kcs-application.gemspec'
