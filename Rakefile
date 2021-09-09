@@ -5,12 +5,11 @@ require "hoe"
 require "rake/clean"
 
 Hoe.plugin :doofus
-Hoe.plugin :email unless ENV["CI"] || ENV["TRAVIS"]
+Hoe.plugin :email unless ENV["CI"]
 Hoe.plugin :gemspec2
 Hoe.plugin :git
 Hoe.plugin :minitest
 Hoe.plugin :rubygems
-Hoe.plugin :travis
 
 spec = Hoe.spec "marlowe" do
   developer("Trevor Oke", "toke@kineticcafe.com")
@@ -21,7 +20,7 @@ spec = Hoe.spec "marlowe" do
 
   license "MIT"
 
-  ruby20!
+  require_ruby_version ">= 2.0", "< 4"
 
   extra_deps << ["request_store", "~> 1.2"]
   extra_deps << ["rack", ">= 0.9", "< 3"]
@@ -31,18 +30,16 @@ spec = Hoe.spec "marlowe" do
   extra_dev_deps << ["hoe-gemspec2", "~> 1.1"]
   extra_dev_deps << ["hoe-git", "~> 1.6"]
   extra_dev_deps << ["hoe-rubygems", "~> 1.0"]
-  extra_dev_deps << ["hoe-travis", "~> 1.2"]
   extra_dev_deps << ["minitest", "~> 5.4"]
   extra_dev_deps << ["minitest-autotest", "~> 1.0"]
-  extra_dev_deps << ["minitest-bonus-assertions", "~> 2.0"]
+  extra_dev_deps << ["minitest-bonus-assertions", "~> 3.0"]
   extra_dev_deps << ["minitest-focus", "~> 1.1"]
   extra_dev_deps << ["minitest-moar", "~> 0.0"]
-  extra_dev_deps << ["rack-test", "~> 0.6"]
-  extra_dev_deps << ["rake", ">= 10.0", "< 12"]
-  extra_dev_deps << ["rdoc", "~> 4.2"]
+  extra_dev_deps << ["rack-test", "~> 1.0"]
+  extra_dev_deps << ["rake", ">= 10.0", "< 14"]
+  extra_dev_deps << ["rdoc", ">= 4.2"]
   extra_dev_deps << ["standard", "~> 1.0"]
-  extra_dev_deps << ["coveralls", "~> 0.8"]
-  extra_dev_deps << ["simplecov", "~> 0.7"]
+  extra_dev_deps << ["simplecov", "~> 0.21"]
 end
 
 ENV["RUBYOPT"] = "-W0"
@@ -61,11 +58,6 @@ if File.exist?(".simplecov-prelude.rb")
     task :coverage do
       spec.test_prelude = 'load ".simplecov-prelude.rb"'
       Rake::Task["test"].execute
-    end
-
-    task :coveralls do
-      ENV["coveralls"] = "1"
-      Rake::Task["test:coverage"].execute
     end
 
     CLOBBER << "coverage"

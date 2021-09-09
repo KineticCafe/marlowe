@@ -67,5 +67,9 @@ jobs:
           bundler-cache: true
       - name: Install dependencies
         run: bundle install
+      - name: Install appraisals
+        run: bundle exec ruby -S appraisal install
       - name: Run tests
-        run: bundle exec ruby -S rake test --trace
+        run: bundle exec ruby -S rake test
+      - name: Run appraisals
+        run: bundle exec ruby -S appraisal rake test
