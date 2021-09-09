@@ -1,9 +1,9 @@
 # -*- encoding: utf-8 -*-
-# stub: marlowe 2.0 ruby lib
+# stub: marlowe 2.1 ruby lib
 
 Gem::Specification.new do |s|
   s.name = "marlowe".freeze
-  s.version = "2.0"
+  s.version = "2.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0".freeze) if s.respond_to? :required_rubygems_version=
   s.metadata = { "documentation_uri" => "http://www.rubydoc.info/github/KineticCafe/marlowe/master", "source_code_uri" => "https://github.com/KineticCafe/marlowe/" } if s.respond_to? :metadata=
@@ -43,6 +43,7 @@ Gem::Specification.new do |s|
     s.add_development_dependency(%q<rdoc>.freeze, [">= 4.2"])
     s.add_development_dependency(%q<standard>.freeze, ["~> 1.0"])
     s.add_development_dependency(%q<simplecov>.freeze, ["~> 0.21"])
+    s.add_development_dependency(%q<psych>.freeze, ["~> 3.1"])
     s.add_development_dependency(%q<hoe>.freeze, ["~> 3.23"])
   else
     s.add_dependency(%q<request_store>.freeze, ["~> 1.2"])
@@ -62,6 +63,7 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<rdoc>.freeze, [">= 4.2"])
     s.add_dependency(%q<standard>.freeze, ["~> 1.0"])
     s.add_dependency(%q<simplecov>.freeze, ["~> 0.21"])
+    s.add_dependency(%q<psych>.freeze, ["~> 3.1"])
     s.add_dependency(%q<hoe>.freeze, ["~> 3.23"])
   end
 end

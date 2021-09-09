@@ -40,6 +40,7 @@ spec = Hoe.spec "marlowe" do
   extra_dev_deps << ["rdoc", ">= 4.2"]
   extra_dev_deps << ["standard", "~> 1.0"]
   extra_dev_deps << ["simplecov", "~> 0.21"]
+  extra_dev_deps << ["psych", "~> 3.1"]
 end
 
 ENV["RUBYOPT"] = "-W0"
