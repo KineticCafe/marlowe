@@ -1,0 +1,4 @@
+parallel: true
+ruby_version: 2.7
+ignore:
+  - 'marlowe.gemspec'

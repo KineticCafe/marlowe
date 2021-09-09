@@ -2,7 +2,7 @@
 
 module Marlowe
   class Railtie < Rails::Railtie # :nodoc:
-    initializer 'marlowe.configure_rails_initialization' do
+    initializer "marlowe.configure_rails_initialization" do
       config = app.config
 
       opts = {

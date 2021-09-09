@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require 'rack'
-require 'request_store'
-require 'securerandom'
+require "rack"
+require "request_store"
+require "securerandom"
 
 module Marlowe
   # Marlowe correlation id middleware. Including this into your middleware
@@ -10,7 +10,7 @@ module Marlowe
   # that id in a request session variable.
   class Middleware
     # The name of the default header to look for and put the correlation id in.
-    CORRELATION_HEADER = 'X-Request-Id' #:nodoc:
+    CORRELATION_HEADER = "X-Request-Id" #:nodoc:
 
     # Configure the Marlowe middleware to call +app+ with options +opts+.
     #
@@ -55,10 +55,10 @@ module Marlowe
       @app.call(env).tap { |_status, headers, _body|
         if @return
           headers[@header] = if @action_dispatch
-                               req.request_id
-                             else
-                               RequestStore.store[:correlation_id]
-                             end
+            req.request_id
+          else
+            RequestStore.store[:correlation_id]
+          end
         end
       }
     end
@@ -67,15 +67,15 @@ module Marlowe
 
     def format_header_name(header)
       [
-        header.to_s.tr('_', '-').freeze,
-        "HTTP_#{header.to_s.tr('-', '_').upcase}"
+        header.to_s.tr("_", "-").freeze,
+        "HTTP_#{header.to_s.tr("-", "_").upcase}"
       ]
     end
 
     def make_request_id(request_id)
       if @handler == :simple
         simple(request_id)
-      elsif @handler.kind_of?(Proc)
+      elsif @handler.is_a?(Proc)
         simple(@handler.call(request_id))
       else
         clean(request_id)
@@ -83,7 +83,7 @@ module Marlowe
     end
 
     def clean(request_id)
-      simple(request_id).gsub(/[^\w\-]/, '')[0, 255]
+      simple(request_id).gsub(/[^\w\-]/, "")[0, 255]
     end
 
     def simple(request_id)
