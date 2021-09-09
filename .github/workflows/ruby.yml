@@ -54,10 +54,9 @@ jobs:
             ruby: truffleruby-head
     runs-on: ${{ matrix.os }}-latest
     continue-on-error: ${{
-      matrix.ruby == 'truffleruby' ||
-      matrix.ruby == 'truffleruby-head' ||
-      endsWith(matrix.ruby, 'head') ||
+      startsWith(matrix.ruby, 'truffle') ||
       matrix.ruby == 'debug' ||
+      endsWith(matrix.ruby, 'head') ||
       (startsWith(matrix.ruby, 'jruby') && matrix.os == 'windows')
       }}
     steps:
