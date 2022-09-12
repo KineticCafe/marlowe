@@ -1,3 +1,10 @@
+### 3.0 / 2022-09-11
+
+- Added a Faraday request middleware.
+- Replaced Hurley example with examples for the use of the Faraday
+  middleware.
+- Added global Marlowe configuration.
+
 ### 2.1 / 2021-09-08
 
 - Allow the use of Ruby 3.
