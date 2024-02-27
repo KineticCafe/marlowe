@@ -2,7 +2,7 @@
 
 # Marlowe, a correlation id injector.
 module Marlowe
-  VERSION = "3.0" # :nodoc:
+  VERSION = "3.1" # :nodoc:
 
   require "marlowe/config"
   require "marlowe/middleware"

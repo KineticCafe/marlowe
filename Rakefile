@@ -28,19 +28,16 @@ spec = Hoe.spec "marlowe" do
   extra_dev_deps << ["appraisal", "~> 2.1"]
   extra_dev_deps << ["hoe-doofus", "~> 1.0"]
   extra_dev_deps << ["hoe-gemspec2", "~> 1.1"]
-  extra_dev_deps << ["hoe-git", "~> 1.6"]
+  extra_dev_deps << ["hoe-git2", "~> 1.7"]
   extra_dev_deps << ["hoe-rubygems", "~> 1.0"]
   extra_dev_deps << ["minitest", "~> 5.4"]
   extra_dev_deps << ["minitest-autotest", "~> 1.0"]
-  extra_dev_deps << ["minitest-bonus-assertions", "~> 3.0"]
   extra_dev_deps << ["minitest-focus", "~> 1.1"]
   extra_dev_deps << ["minitest-moar", "~> 0.0"]
   extra_dev_deps << ["rack-test", "~> 2.0"]
   extra_dev_deps << ["rake", ">= 10.0", "< 14"]
-  extra_dev_deps << ["rdoc", ">= 4.2"]
   extra_dev_deps << ["standard", "~> 1.0"]
   extra_dev_deps << ["simplecov", "~> 0.21"]
-  extra_dev_deps << ["psych", "~> 3.1"]
 end
 
 ENV["RUBYOPT"] = "-W0"
