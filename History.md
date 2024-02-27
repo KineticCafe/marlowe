@@ -1,17 +1,24 @@
-### 3.0 / 2022-09-11
+# History
+
+## 3.1 / 2024-02-29
+
+- Fixed some noise in the tests as preparation for Rack 3.1.
+- Updated dependencies.
+
+## 3.0 / 2022-09-11
 
 - Added a Faraday request middleware.
 - Replaced Hurley example with examples for the use of the Faraday
   middleware.
 - Added global Marlowe configuration.
 
-### 2.1 / 2021-09-08
+## 2.1 / 2021-09-08
 
 - Allow the use of Ruby 3.
 - Switch to standardruby instead of rubocop.
 - Switch from Travis to Github Actions.
 
-### 2.0 / 2016-11-16
+## 2.0 / 2016-11-16
 
 - Breaking change: the correlation header defaults to `X-Request-Id` instead of
   `Correlation-Id`.
@@ -22,21 +29,21 @@
   part of the response.
 - Marlowe is more configurable now.
 
-### 1.0.3 / 2016-01-15
+## 1.0.3 / 2016-01-15
 
 - Update Readme example of using available formatted subclass.
 - Make the correlation header name configurable
 
-### 1.0.2 / 2015-11-24
+## 1.0.2 / 2015-11-24
 
 - Add documentation for using Marlowe with [lograge][].
 
-### 1.0.1 / 2015-10-20
+## 1.0.1 / 2015-10-20
 
 - Update gemspec with homepage
 - Update Rakefile
 
-### 1.0.0 / 2015-10-16
+## 1.0.0 / 2015-10-16
 
 - Initial Commit
 
